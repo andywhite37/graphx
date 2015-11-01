@@ -5,32 +5,24 @@ import utest.Assert;
 class TestGraph {
   public function new() {}
 
-  public function createGraph1() {
-    var graph : Graph<String> = new Graph({
-      equals: function(a, b) return a == b,
-      getKey: function(a) return a
-    });
-    graph.addEdgesFrom("eat breakfast", ["take out trash"]);
-    graph.addEdgesFrom("brush teeth", ["shave"]);
-    graph.addEdgesFrom("get dressed", ["eat breakfast", "read paper"]);
-    graph.addEdgesFrom("shave", ["get dressed"]);
-    graph.addEdgesFrom("wake up", ["brush teeth", "take shower"]);
-    graph.addEdgesFrom("take out trash", ["go to work"]);
-    return graph;
+  public function createGraph1() : Graph<String> {
+    return new Graph({ equals: function(a, b) return a == b, getKey: function(a) return a })
+      .addEdgesFrom("eat breakfast", ["take out trash"])
+      .addEdgesFrom("brush teeth", ["shave"])
+      .addEdgesFrom("get dressed", ["eat breakfast", "read paper"])
+      .addEdgesFrom("shave", ["get dressed"])
+      .addEdgesFrom("wake up", ["brush teeth", "take shower"])
+      .addEdgesFrom("take out trash", ["go to work"]);
   }
 
-  public function createGraph2() {
-    var graph : Graph<Int> = new Graph({
-      equals: function(a, b) return a == b,
-      getKey: function(a) return Std.string(a)
-    });
-    // https://en.wikipedia.org/wiki/Topological_sorting#/media/File:Directed_acyclic_graph.png
-    graph.addEdgesFrom(7, [11, 8]);
-    graph.addEdgesFrom(5, [11]);
-    graph.addEdgesFrom(3, [8, 10]);
-    graph.addEdgesFrom(11, [2, 9, 10]);
-    graph.addEdgesFrom(8, [9]);
-    return graph;
+  public function createGraph2() : Graph<Int> {
+    return new Graph({ equals: function(a, b) return a == b, getKey: function(a) return Std.string(a) })
+      // https://en.wikipedia.org/wiki/Topological_sorting#/media/File:Directed_acyclic_graph.png
+      .addEdgesFrom(7, [11, 8])
+      .addEdgesFrom(5, [11])
+      .addEdgesFrom(3, [8, 10])
+      .addEdgesFrom(11, [2, 9, 10])
+      .addEdgesFrom(8, [9]);
   }
 
   public function testDfs1() {

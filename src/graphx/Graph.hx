@@ -99,10 +99,10 @@ class Graph<T> {
   public function clone() : Graph<T> {
     var newGraph = new Graph(nodeFunctions);
     newGraph = nodes.fold(function(node, acc) {
-      return newGraph = newGraph.addNode(new Node(node.value));
+      return newGraph.addNode(new Node(node.value));
     }, newGraph);
     newGraph = edges.fold(function(edge, acc) {
-      return newGraph = newGraph.addEdgeFrom(edge.from.value, edge.to.value);
+      return newGraph.addEdgeFrom(edge.from.value, edge.to.value);
     }, newGraph);
     return newGraph;
   }
@@ -124,4 +124,23 @@ class Graph<T> {
       if (!predicate(node)) return false;
     return true;
   }
+
+  public function toObject() : { nodes: Array<T>, edges : Array<{ from : T, to : T }> } {
+    return {
+      nodes: nodes.map(function(node) {
+        return node.value;
+      }),
+      edges: edges.map(function(edge) {
+        return {
+          from: edge.from.value,
+          to: edge.to.value
+        };
+      })
+    };
+  }
+
+  public function toString() : String {
+    return haxe.Json.stringify(toObject(), null, '  ');
+  }
+
 }
