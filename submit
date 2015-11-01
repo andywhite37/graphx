@@ -1,0 +1,11 @@
+#! /usr/bin/env bash
+set -euo pipefail
+IFS=$'\n\t'
+
+if [[ -f graphx.zip ]]; then
+  rm graphx
+fi
+
+zip -r graphx src test haxelib.json build.hxml hmm.json LICENSE README.md
+
+haxelib submit graphx.zip

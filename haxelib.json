@@ -1,0 +1,11 @@
+{
+  "name": "graphx",
+  "url": "https://github.com/andywhite37/graphx",
+  "license": "MIT",
+  "tags": ["graph", "utility"],
+  "description": "A basic graph library for Haxe",
+  "version": "0.0.1",
+  "classPath": "src/",
+  "releasenote": "Initial release to haxelib",
+  "contributors": ["andywhite37"]
+}
