@@ -3,7 +3,7 @@ set -euo pipefail
 IFS=$'\n\t'
 
 if [[ -f graphx.zip ]]; then
-  rm graphx
+  rm graphx.zip
 fi
 
 zip -r graphx src test haxelib.json build.hxml hmm.json LICENSE README.md
