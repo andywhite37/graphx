@@ -4,8 +4,8 @@
   "license": "MIT",
   "tags": ["graph", "utility"],
   "description": "A basic graph library for Haxe",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "classPath": "src/",
-  "releasenote": "Initial release to haxelib",
+  "releasenote": "Depth-first and breadth-first search",
   "contributors": ["andywhite37"]
 }
