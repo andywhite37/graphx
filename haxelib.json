@@ -4,8 +4,8 @@
   "license": "MIT",
   "tags": ["graph", "utility"],
   "description": "A basic graph library for Haxe",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "classPath": "src/",
-  "releasenote": "Depth-first and breadth-first search",
+  "releasenote": "Fix breadth-first search, code cleanup",
   "contributors": ["andywhite37"]
 }

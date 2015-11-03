@@ -89,7 +89,7 @@ class Graph<T> {
     var queue : Array<Node<T>> = [];
     var visited : Map<String, Bool> = new Map();
 
-    function bfsForNode(node : Node<T>) : TAcc {
+    function bfsFromNode(node : Node<T>) : TAcc {
       queue.push(node);
 
       while (queue.length > 0) {
@@ -119,7 +119,7 @@ class Graph<T> {
 
     // Visit the nodes in the queue, which contains the breadth-first sequence of nodes
     return nodes.fold(function(node, acc : TAcc) {
-      return bfsForNode(node);
+      return bfsFromNode(node);
     }, acc);
   }
 
@@ -165,12 +165,12 @@ class Graph<T> {
     return true;
   }
 
-  public function getKey(node : Node<T>) : String {
-    return nodeFunctions.getKey(node.value);
+  public function getKey(nv : NodeOrValue<T>) : String {
+    return nodeFunctions.getKey(nv.toValue());
   }
 
-  public function equals(a : Node<T>, b : Node<T>) : Bool {
-    return nodeFunctions.equals(a.value, b.value);
+  public function equals(a : NodeOrValue<T>, b : NodeOrValue<T>) : Bool {
+    return nodeFunctions.equals(a.toValue(), b.toValue());
   }
 
   public function toObject() : { nodes: Array<T>, edges : Array<{ from : T, to : T }> } {
