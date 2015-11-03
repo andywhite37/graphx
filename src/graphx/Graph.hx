@@ -44,29 +44,29 @@ class Graph<T> {
 
   public function getEdgesOut(nv : NodeOrValue<T>) : Array<Edge<T>> {
     return edges.filter(function(edge) {
-      return nodeFunctions.equals(nv.toValue(), edge.from.value);
+      return equals(nv, edge.from);
     });
   }
 
   public function getEdgesIn(nv : NodeOrValue<T>) : Array<Edge<T>> {
     return edges.filter(function(edge) {
-      return nodeFunctions.equals(nv.toValue(), edge.to.value);
+      return equals(nv, edge.to);
     });
   }
 
-  public function dfs<TAcc>(callback: TAcc -> Node<T> -> TAcc, acc : TAcc) : TAcc {
+  public function dfs<TAcc>(visit: TAcc -> Node<T> -> TAcc, acc : TAcc) : TAcc {
     var visited : Map<String, Bool> = new Map();
 
     function dfsFromNode(node : Node<T>) : TAcc {
       // Check if we've already visited this node
-      var key = nodeFunctions.getKey(node.value);
+      var key = getKey(node);
       if (visited.exists(key)) return acc;
       visited.set(key, true);
 
       // Get unvisited nodes from the current node
       var unvisitedNodes = getEdgesOut(node)
         .filter(function(edge) {
-          return !visited.exists(nodeFunctions.getKey(edge.to.value));
+          return !visited.exists(getKey(edge.to));
         })
         .map(function(edge) {
           return edge.to;
@@ -78,54 +78,48 @@ class Graph<T> {
       }, acc);
 
       // Visit the current node
-      return callback(acc, node);
+      return visit(acc, node);
     }
     return nodes.fold(function(node, acc : TAcc) {
       return dfsFromNode(node);
     }, acc);
   }
 
-  public function bfs<TAcc>(callback : TAcc -> Node<T> -> TAcc, acc : TAcc) : TAcc {
-    var nodeQueue : Array<Node<T>> = [];
+  public function bfs<TAcc>(visit : TAcc -> Node<T> -> TAcc, acc : TAcc) : TAcc {
+    var queue : Array<Node<T>> = [];
     var visited : Map<String, Bool> = new Map();
 
-    function bfsForNode(node : Node<T>) : Void {
-      // Check if we've already visited this node
-      var key = nodeFunctions.getKey(node.value);
-      if (visited.exists(key)) return;
-      visited.set(key, true);
+    function bfsForNode(node : Node<T>) : TAcc {
+      queue.push(node);
 
-      // Add current node to the queue
-      nodeQueue.push(node);
+      while (queue.length > 0) {
+        var currentNode = queue.shift();
 
-      // Get unvisited nodes from the current node
-      var unvisitedNodes = getEdgesOut(node)
-        .filter(function(edge) {
-          return !visited.exists(nodeFunctions.getKey(node.value));
-        })
-        .map(function(edge) {
-          return edge.to;
+        var key = getKey(currentNode);
+        if (visited.exists(key)) continue;
+        visited.set(key, true);
+
+        acc = visit(acc, currentNode);
+
+        var unvisitedNodes = getEdgesOut(currentNode)
+          .filter(function(edge) {
+            return !visited.exists(getKey(edge.to));
+          })
+          .map(function(edge) {
+            return edge.to;
+          });
+
+        unvisitedNodes.iter(function(unvisitedNode) {
+          queue.push(unvisitedNode);
         });
+      }
 
-      // Add referenced nodes to the queue
-      unvisitedNodes.iter(function(unvisitedNode) {
-        nodeQueue.push(unvisitedNode);
-      });
-
-      // traverse the referenced nodes
-      unvisitedNodes.iter(function(unvisitedNode) {
-        bfsForNode(unvisitedNode);
-      });
+      return acc;
     }
 
-    // Traverse all the nodes in the graph
-    nodes.iter(function(node) {
-      return bfsForNode(node);
-    });
-
     // Visit the nodes in the queue, which contains the breadth-first sequence of nodes
-    return nodeQueue.fold(function(node, acc) {
-      return callback(acc, node);
+    return nodes.fold(function(node, acc : TAcc) {
+      return bfsForNode(node);
     }, acc);
   }
 
@@ -155,7 +149,7 @@ class Graph<T> {
 
   public function contains(nv : NodeOrValue<T>) : Bool {
     return anyNode(function(node) {
-      return nodeFunctions.equals(node.value, nv.toValue());
+      return equals(node, nv);
     });
   }
 
@@ -169,6 +163,14 @@ class Graph<T> {
     for (node in nodes)
       if (!predicate(node)) return false;
     return true;
+  }
+
+  public function getKey(node : Node<T>) : String {
+    return nodeFunctions.getKey(node.value);
+  }
+
+  public function equals(a : Node<T>, b : Node<T>) : Bool {
+    return nodeFunctions.equals(a.value, b.value);
   }
 
   public function toObject() : { nodes: Array<T>, edges : Array<{ from : T, to : T }> } {
