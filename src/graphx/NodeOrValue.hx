@@ -20,11 +20,11 @@ abstract NodeOrValue<T>(NodeOrValueType<T>) {
     return new NodeOrValue(NVValue(value));
   }
 
-  public static function fromNodes<T>(nodes : Array<Node<T>>) : Array<NodeOrValue<T>> {
+  public static function mapNodes<T>(nodes : Array<Node<T>>) : Array<NodeOrValue<T>> {
     return nodes.map(fromNode);
   }
 
-  public static function fromValues<T>(values : Array<T>) : Array<NodeOrValue<T>> {
+  public static function mapValues<T>(values : Array<T>) : Array<NodeOrValue<T>> {
     return values.map(fromValue);
   }
 
