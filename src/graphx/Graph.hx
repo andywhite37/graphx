@@ -170,7 +170,7 @@ class Graph<T> {
   }
 
   public function equals(a : NodeOrValue<T>, b : NodeOrValue<T>) : Bool {
-    return nodeFunctions.equals(a.toValue(), b.toValue());
+    return nodeFunctions.isEqual(a.toValue(), b.toValue());
   }
 
   public function toObject() : { nodes: Array<T>, edges : Array<{ from : T, to : T }> } {

@@ -14,8 +14,7 @@ class TestGraph {
   }
 
   public function createSingletonGraph() : Graph<Int> {
-    return new IntGraph()
-      .addNode(42);
+    return new IntGraph().addNode(42);
   }
 
   public function createBinaryTreeGraph() {
@@ -46,6 +45,26 @@ class TestGraph {
       .addEdgesFrom(8, [9]);
   }
 
+  public function createFloatGraph() : Graph<Float> {
+    return new FloatGraph()
+      // https://en.wikipedia.org/wiki/Topological_sorting#/media/File:Directed_acyclic_graph.png
+      .addEdgesFrom(7.1, [11.1, 8.1])
+      .addEdgesFrom(5.1, [11.1])
+      .addEdgesFrom(3.1, [8.1, 10.1])
+      .addEdgesFrom(11.1, [2.1, 9.1, 10.1])
+      .addEdgesFrom(8.1, [9.1]);
+  }
+
+  public function createStringGraph() : Graph<String> {
+    return new StringGraph()
+      // https://en.wikipedia.org/wiki/Topological_sorting#/media/File:Directed_acyclic_graph.png
+      .addEdgesFrom("7.1", ["11.1", "8.1"])
+      .addEdgesFrom("5.1", ["11.1"])
+      .addEdgesFrom("3.1", ["8.1", "10.1"])
+      .addEdgesFrom("11.1", ["2.1", "9.1", "10.1"])
+      .addEdgesFrom("8.1", ["9.1"]);
+  }
+
   public function createSingletonGraphWithCycle() : Graph<Int> {
     return new IntGraph()
       .addEdgeFrom(1, 1);
@@ -57,6 +76,7 @@ class TestGraph {
       .addEdgeFrom(2, 3)
       .addEdgeFrom(3, 1);
   }
+
 
   ////////////////////////////////////////////////////////////////////////////////
   // Depth-first search
@@ -184,6 +204,18 @@ class TestGraph {
     var graph = createIntGraph();
     var result = graph.topologicalSort();
     Assert.same([3, 5, 7, 8, 11, 10, 9, 2], result);
+  }
+
+  public function testTopologicalSortFloatGraph() {
+    var graph = createFloatGraph();
+    var result = graph.topologicalSort();
+    Assert.same([3.1, 5.1, 7.1, 8.1, 11.1, 10.1, 9.1, 2.1], result);
+  }
+
+  public function testTopologicalSortStringGraph() {
+    var graph = createStringGraph();
+    var result = graph.topologicalSort();
+    Assert.same(["3.1", "5.1", "7.1", "8.1", "11.1", "10.1", "9.1", "2.1"], result);
   }
 
   ////////////////////////////////////////////////////////////////////////////////

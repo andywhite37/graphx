@@ -1,6 +1,6 @@
 package graphx;
 
 typedef NodeFunctions<T> = {
-  equals: T -> T -> Bool,
+  isEqual: T -> T -> Bool,
   getKey: T -> String
 };

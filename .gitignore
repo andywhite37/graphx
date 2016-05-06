@@ -1,5 +1,6 @@
 # haxelib
 .haxelib/
+dump/
 
 # project files
 bin/
